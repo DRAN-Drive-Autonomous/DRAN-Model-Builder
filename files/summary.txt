@@ -1,0 +1,370 @@
+Model: "DRAN"
+__________________________________________________________________________________________________
+ Layer (type)                   Output Shape         Param #     Connected to                     
+==================================================================================================
+ input_2 (InputLayer)           [(None, 128, 128, 1  0           []                               
+                                )]                                                                
+                                                                                                  
+ input_1 (InputLayer)           [(None, 256, 256, 3  0           []                               
+                                )]                                                                
+                                                                                                  
+ sequential_1 (Sequential)      (None, 128, 128, 1)  0           ['input_2[0][0]']                
+                                                                                                  
+ sequential (Sequential)        (None, 256, 256, 3)  0           ['input_1[0][0]']                
+                                                                                                  
+ conv2d_1 (Conv2D)              (None, 32, 32, 64)   1088        ['sequential_1[0][0]']           
+                                                                                                  
+ conv2d (Conv2D)                (None, 64, 64, 64)   3136        ['sequential[0][0]']             
+                                                                                                  
+ tf.reshape_1 (TFOpLambda)      (None, 1024, 64)     0           ['conv2d_1[0][0]']               
+                                                                                                  
+ tf.reshape (TFOpLambda)        (None, 4096, 64)     0           ['conv2d[0][0]']                 
+                                                                                                  
+ radar (AddPositionEmbs)        (None, 1024, 64)     65536       ['tf.reshape_1[0][0]']           
+                                                                                                  
+ segmentor (AddPositionEmbs)    (None, 4096, 64)     262144      ['tf.reshape[0][0]']             
+                                                                                                  
+ dropout_13 (Dropout)           (None, 1024, 64)     0           ['radar[0][0]']                  
+                                                                                                  
+ dropout (Dropout)              (None, 4096, 64)     0           ['segmentor[0][0]']              
+                                                                                                  
+ layer_normalization_12 (LayerN  (None, 1024, 64)    128         ['dropout_13[0][0]']             
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization (LayerNorm  (None, 4096, 64)    128         ['dropout[0][0]']                
+ alization)                                                                                       
+                                                                                                  
+ multi_head_attention_6 (MultiH  (None, 1024, 64)    66368       ['layer_normalization_12[0][0]', 
+ eadAttention)                                                    'layer_normalization_12[0][0]'] 
+                                                                                                  
+ multi_head_attention (MultiHea  (None, 4096, 64)    66368       ['layer_normalization[0][0]',    
+ dAttention)                                                      'layer_normalization[0][0]']    
+                                                                                                  
+ add_12 (Add)                   (None, 1024, 64)     0           ['multi_head_attention_6[0][0]', 
+                                                                  'dropout_13[0][0]']             
+                                                                                                  
+ add (Add)                      (None, 4096, 64)     0           ['multi_head_attention[0][0]',   
+                                                                  'dropout[0][0]']                
+                                                                                                  
+ layer_normalization_13 (LayerN  (None, 1024, 64)    128         ['add_12[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_1 (LayerNo  (None, 4096, 64)    128         ['add[0][0]']                    
+ rmalization)                                                                                     
+                                                                                                  
+ dense_12 (Dense)               (None, 1024, 128)    8320        ['layer_normalization_13[0][0]'] 
+                                                                                                  
+ dense (Dense)                  (None, 4096, 128)    8320        ['layer_normalization_1[0][0]']  
+                                                                                                  
+ dropout_14 (Dropout)           (None, 1024, 128)    0           ['dense_12[0][0]']               
+                                                                                                  
+ dropout_1 (Dropout)            (None, 4096, 128)    0           ['dense[0][0]']                  
+                                                                                                  
+ dense_13 (Dense)               (None, 1024, 64)     8256        ['dropout_14[0][0]']             
+                                                                                                  
+ dense_1 (Dense)                (None, 4096, 64)     8256        ['dropout_1[0][0]']              
+                                                                                                  
+ dropout_15 (Dropout)           (None, 1024, 64)     0           ['dense_13[0][0]']               
+                                                                                                  
+ dropout_2 (Dropout)            (None, 4096, 64)     0           ['dense_1[0][0]']                
+                                                                                                  
+ add_13 (Add)                   (None, 1024, 64)     0           ['dropout_15[0][0]',             
+                                                                  'add_12[0][0]']                 
+                                                                                                  
+ add_1 (Add)                    (None, 4096, 64)     0           ['dropout_2[0][0]',              
+                                                                  'add[0][0]']                    
+                                                                                                  
+ layer_normalization_14 (LayerN  (None, 1024, 64)    128         ['add_13[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_2 (LayerNo  (None, 4096, 64)    128         ['add_1[0][0]']                  
+ rmalization)                                                                                     
+                                                                                                  
+ multi_head_attention_7 (MultiH  (None, 1024, 64)    66368       ['layer_normalization_14[0][0]', 
+ eadAttention)                                                    'layer_normalization_14[0][0]'] 
+                                                                                                  
+ multi_head_attention_1 (MultiH  (None, 4096, 64)    66368       ['layer_normalization_2[0][0]',  
+ eadAttention)                                                    'layer_normalization_2[0][0]']  
+                                                                                                  
+ add_14 (Add)                   (None, 1024, 64)     0           ['multi_head_attention_7[0][0]', 
+                                                                  'add_13[0][0]']                 
+                                                                                                  
+ add_2 (Add)                    (None, 4096, 64)     0           ['multi_head_attention_1[0][0]', 
+                                                                  'add_1[0][0]']                  
+                                                                                                  
+ layer_normalization_15 (LayerN  (None, 1024, 64)    128         ['add_14[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_3 (LayerNo  (None, 4096, 64)    128         ['add_2[0][0]']                  
+ rmalization)                                                                                     
+                                                                                                  
+ dense_14 (Dense)               (None, 1024, 128)    8320        ['layer_normalization_15[0][0]'] 
+                                                                                                  
+ dense_2 (Dense)                (None, 4096, 128)    8320        ['layer_normalization_3[0][0]']  
+                                                                                                  
+ dropout_16 (Dropout)           (None, 1024, 128)    0           ['dense_14[0][0]']               
+                                                                                                  
+ dropout_3 (Dropout)            (None, 4096, 128)    0           ['dense_2[0][0]']                
+                                                                                                  
+ dense_15 (Dense)               (None, 1024, 64)     8256        ['dropout_16[0][0]']             
+                                                                                                  
+ dense_3 (Dense)                (None, 4096, 64)     8256        ['dropout_3[0][0]']              
+                                                                                                  
+ dropout_17 (Dropout)           (None, 1024, 64)     0           ['dense_15[0][0]']               
+                                                                                                  
+ dropout_4 (Dropout)            (None, 4096, 64)     0           ['dense_3[0][0]']                
+                                                                                                  
+ add_15 (Add)                   (None, 1024, 64)     0           ['dropout_17[0][0]',             
+                                                                  'add_14[0][0]']                 
+                                                                                                  
+ add_3 (Add)                    (None, 4096, 64)     0           ['dropout_4[0][0]',              
+                                                                  'add_2[0][0]']                  
+                                                                                                  
+ layer_normalization_16 (LayerN  (None, 1024, 64)    128         ['add_15[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_4 (LayerNo  (None, 4096, 64)    128         ['add_3[0][0]']                  
+ rmalization)                                                                                     
+                                                                                                  
+ multi_head_attention_8 (MultiH  (None, 1024, 64)    66368       ['layer_normalization_16[0][0]', 
+ eadAttention)                                                    'layer_normalization_16[0][0]'] 
+                                                                                                  
+ multi_head_attention_2 (MultiH  (None, 4096, 64)    66368       ['layer_normalization_4[0][0]',  
+ eadAttention)                                                    'layer_normalization_4[0][0]']  
+                                                                                                  
+ add_16 (Add)                   (None, 1024, 64)     0           ['multi_head_attention_8[0][0]', 
+                                                                  'add_15[0][0]']                 
+                                                                                                  
+ add_4 (Add)                    (None, 4096, 64)     0           ['multi_head_attention_2[0][0]', 
+                                                                  'add_3[0][0]']                  
+                                                                                                  
+ layer_normalization_17 (LayerN  (None, 1024, 64)    128         ['add_16[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_5 (LayerNo  (None, 4096, 64)    128         ['add_4[0][0]']                  
+ rmalization)                                                                                     
+                                                                                                  
+ dense_16 (Dense)               (None, 1024, 128)    8320        ['layer_normalization_17[0][0]'] 
+                                                                                                  
+ dense_4 (Dense)                (None, 4096, 128)    8320        ['layer_normalization_5[0][0]']  
+                                                                                                  
+ dropout_18 (Dropout)           (None, 1024, 128)    0           ['dense_16[0][0]']               
+                                                                                                  
+ dropout_5 (Dropout)            (None, 4096, 128)    0           ['dense_4[0][0]']                
+                                                                                                  
+ dense_17 (Dense)               (None, 1024, 64)     8256        ['dropout_18[0][0]']             
+                                                                                                  
+ dense_5 (Dense)                (None, 4096, 64)     8256        ['dropout_5[0][0]']              
+                                                                                                  
+ dropout_19 (Dropout)           (None, 1024, 64)     0           ['dense_17[0][0]']               
+                                                                                                  
+ dropout_6 (Dropout)            (None, 4096, 64)     0           ['dense_5[0][0]']                
+                                                                                                  
+ add_17 (Add)                   (None, 1024, 64)     0           ['dropout_19[0][0]',             
+                                                                  'add_16[0][0]']                 
+                                                                                                  
+ add_5 (Add)                    (None, 4096, 64)     0           ['dropout_6[0][0]',              
+                                                                  'add_4[0][0]']                  
+                                                                                                  
+ layer_normalization_18 (LayerN  (None, 1024, 64)    128         ['add_17[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_6 (LayerNo  (None, 4096, 64)    128         ['add_5[0][0]']                  
+ rmalization)                                                                                     
+                                                                                                  
+ multi_head_attention_9 (MultiH  (None, 1024, 64)    66368       ['layer_normalization_18[0][0]', 
+ eadAttention)                                                    'layer_normalization_18[0][0]'] 
+                                                                                                  
+ multi_head_attention_3 (MultiH  (None, 4096, 64)    66368       ['layer_normalization_6[0][0]',  
+ eadAttention)                                                    'layer_normalization_6[0][0]']  
+                                                                                                  
+ add_18 (Add)                   (None, 1024, 64)     0           ['multi_head_attention_9[0][0]', 
+                                                                  'add_17[0][0]']                 
+                                                                                                  
+ add_6 (Add)                    (None, 4096, 64)     0           ['multi_head_attention_3[0][0]', 
+                                                                  'add_5[0][0]']                  
+                                                                                                  
+ layer_normalization_19 (LayerN  (None, 1024, 64)    128         ['add_18[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_7 (LayerNo  (None, 4096, 64)    128         ['add_6[0][0]']                  
+ rmalization)                                                                                     
+                                                                                                  
+ dense_18 (Dense)               (None, 1024, 128)    8320        ['layer_normalization_19[0][0]'] 
+                                                                                                  
+ dense_6 (Dense)                (None, 4096, 128)    8320        ['layer_normalization_7[0][0]']  
+                                                                                                  
+ dropout_20 (Dropout)           (None, 1024, 128)    0           ['dense_18[0][0]']               
+                                                                                                  
+ dropout_7 (Dropout)            (None, 4096, 128)    0           ['dense_6[0][0]']                
+                                                                                                  
+ dense_19 (Dense)               (None, 1024, 64)     8256        ['dropout_20[0][0]']             
+                                                                                                  
+ dense_7 (Dense)                (None, 4096, 64)     8256        ['dropout_7[0][0]']              
+                                                                                                  
+ dropout_21 (Dropout)           (None, 1024, 64)     0           ['dense_19[0][0]']               
+                                                                                                  
+ dropout_8 (Dropout)            (None, 4096, 64)     0           ['dense_7[0][0]']                
+                                                                                                  
+ add_19 (Add)                   (None, 1024, 64)     0           ['dropout_21[0][0]',             
+                                                                  'add_18[0][0]']                 
+                                                                                                  
+ add_7 (Add)                    (None, 4096, 64)     0           ['dropout_8[0][0]',              
+                                                                  'add_6[0][0]']                  
+                                                                                                  
+ layer_normalization_20 (LayerN  (None, 1024, 64)    128         ['add_19[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_8 (LayerNo  (None, 4096, 64)    128         ['add_7[0][0]']                  
+ rmalization)                                                                                     
+                                                                                                  
+ multi_head_attention_10 (Multi  (None, 1024, 64)    66368       ['layer_normalization_20[0][0]', 
+ HeadAttention)                                                   'layer_normalization_20[0][0]'] 
+                                                                                                  
+ multi_head_attention_4 (MultiH  (None, 4096, 64)    66368       ['layer_normalization_8[0][0]',  
+ eadAttention)                                                    'layer_normalization_8[0][0]']  
+                                                                                                  
+ add_20 (Add)                   (None, 1024, 64)     0           ['multi_head_attention_10[0][0]',
+                                                                  'add_19[0][0]']                 
+                                                                                                  
+ add_8 (Add)                    (None, 4096, 64)     0           ['multi_head_attention_4[0][0]', 
+                                                                  'add_7[0][0]']                  
+                                                                                                  
+ layer_normalization_21 (LayerN  (None, 1024, 64)    128         ['add_20[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_9 (LayerNo  (None, 4096, 64)    128         ['add_8[0][0]']                  
+ rmalization)                                                                                     
+                                                                                                  
+ dense_20 (Dense)               (None, 1024, 128)    8320        ['layer_normalization_21[0][0]'] 
+                                                                                                  
+ dense_8 (Dense)                (None, 4096, 128)    8320        ['layer_normalization_9[0][0]']  
+                                                                                                  
+ dropout_22 (Dropout)           (None, 1024, 128)    0           ['dense_20[0][0]']               
+                                                                                                  
+ dropout_9 (Dropout)            (None, 4096, 128)    0           ['dense_8[0][0]']                
+                                                                                                  
+ dense_21 (Dense)               (None, 1024, 64)     8256        ['dropout_22[0][0]']             
+                                                                                                  
+ dense_9 (Dense)                (None, 4096, 64)     8256        ['dropout_9[0][0]']              
+                                                                                                  
+ dropout_23 (Dropout)           (None, 1024, 64)     0           ['dense_21[0][0]']               
+                                                                                                  
+ dropout_10 (Dropout)           (None, 4096, 64)     0           ['dense_9[0][0]']                
+                                                                                                  
+ add_21 (Add)                   (None, 1024, 64)     0           ['dropout_23[0][0]',             
+                                                                  'add_20[0][0]']                 
+                                                                                                  
+ add_9 (Add)                    (None, 4096, 64)     0           ['dropout_10[0][0]',             
+                                                                  'add_8[0][0]']                  
+                                                                                                  
+ layer_normalization_22 (LayerN  (None, 1024, 64)    128         ['add_21[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_10 (LayerN  (None, 4096, 64)    128         ['add_9[0][0]']                  
+ ormalization)                                                                                    
+                                                                                                  
+ multi_head_attention_11 (Multi  (None, 1024, 64)    66368       ['layer_normalization_22[0][0]', 
+ HeadAttention)                                                   'layer_normalization_22[0][0]'] 
+                                                                                                  
+ multi_head_attention_5 (MultiH  (None, 4096, 64)    66368       ['layer_normalization_10[0][0]', 
+ eadAttention)                                                    'layer_normalization_10[0][0]'] 
+                                                                                                  
+ add_22 (Add)                   (None, 1024, 64)     0           ['multi_head_attention_11[0][0]',
+                                                                  'add_21[0][0]']                 
+                                                                                                  
+ add_10 (Add)                   (None, 4096, 64)     0           ['multi_head_attention_5[0][0]', 
+                                                                  'add_9[0][0]']                  
+                                                                                                  
+ layer_normalization_23 (LayerN  (None, 1024, 64)    128         ['add_22[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_11 (LayerN  (None, 4096, 64)    128         ['add_10[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ dense_22 (Dense)               (None, 1024, 128)    8320        ['layer_normalization_23[0][0]'] 
+                                                                                                  
+ dense_10 (Dense)               (None, 4096, 128)    8320        ['layer_normalization_11[0][0]'] 
+                                                                                                  
+ dropout_24 (Dropout)           (None, 1024, 128)    0           ['dense_22[0][0]']               
+                                                                                                  
+ dropout_11 (Dropout)           (None, 4096, 128)    0           ['dense_10[0][0]']               
+                                                                                                  
+ dense_23 (Dense)               (None, 1024, 64)     8256        ['dropout_24[0][0]']             
+                                                                                                  
+ dense_11 (Dense)               (None, 4096, 64)     8256        ['dropout_11[0][0]']             
+                                                                                                  
+ dropout_25 (Dropout)           (None, 1024, 64)     0           ['dense_23[0][0]']               
+                                                                                                  
+ dropout_12 (Dropout)           (None, 4096, 64)     0           ['dense_11[0][0]']               
+                                                                                                  
+ add_23 (Add)                   (None, 1024, 64)     0           ['dropout_25[0][0]',             
+                                                                  'add_22[0][0]']                 
+                                                                                                  
+ add_11 (Add)                   (None, 4096, 64)     0           ['dropout_12[0][0]',             
+                                                                  'add_10[0][0]']                 
+                                                                                                  
+ radar-encoder_norm (LayerNorma  (None, 1024, 64)    128         ['add_23[0][0]']                 
+ lization)                                                                                        
+                                                                                                  
+ segmentor-encoder_norm (LayerN  (None, 4096, 64)    128         ['add_11[0][0]']                 
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_25 (LayerN  (None, 1024, 64)    128         ['radar-encoder_norm[0][0]']     
+ ormalization)                                                                                    
+                                                                                                  
+ layer_normalization_24 (LayerN  (None, 4096, 64)    128         ['segmentor-encoder_norm[0][0]'] 
+ ormalization)                                                                                    
+                                                                                                  
+ flatten_1 (Flatten)            (None, 65536)        0           ['layer_normalization_25[0][0]'] 
+                                                                                                  
+ flatten (Flatten)              (None, 262144)       0           ['layer_normalization_24[0][0]'] 
+                                                                                                  
+ dropout_27 (Dropout)           (None, 65536)        0           ['flatten_1[0][0]']              
+                                                                                                  
+ dropout_26 (Dropout)           (None, 262144)       0           ['flatten[0][0]']                
+                                                                                                  
+ dense_25 (Dense)               (None, 1024)         67109888    ['dropout_27[0][0]']             
+                                                                                                  
+ dense_24 (Dense)               (None, 1024)         268436480   ['dropout_26[0][0]']             
+                                                                                                  
+ concatenate (Concatenate)      (None, 2048)         0           ['dense_25[0][0]',               
+                                                                  'dense_24[0][0]']               
+                                                                                                  
+ dense_26 (Dense)               (None, 128)          262272      ['concatenate[0][0]']            
+                                                                                                  
+ dropout_28 (Dropout)           (None, 128)          0           ['dense_26[0][0]']               
+                                                                                                  
+ dense_27 (Dense)               (None, 2048)         264192      ['dropout_28[0][0]']             
+                                                                                                  
+ dropout_29 (Dropout)           (None, 2048)         0           ['dense_27[0][0]']               
+                                                                                                  
+ dense_28 (Dense)               (None, 2048)         4196352     ['dropout_29[0][0]']             
+                                                                                                  
+ dense_30 (Dense)               (None, 2048)         4196352     ['dropout_29[0][0]']             
+                                                                                                  
+ dense_32 (Dense)               (None, 2048)         4196352     ['dropout_29[0][0]']             
+                                                                                                  
+ dense_34 (Dense)               (None, 2048)         4196352     ['dropout_29[0][0]']             
+                                                                                                  
+ dense_29 (Dense)               (None, 128)          262272      ['dense_28[0][0]']               
+                                                                                                  
+ dense_31 (Dense)               (None, 128)          262272      ['dense_30[0][0]']               
+                                                                                                  
+ dense_33 (Dense)               (None, 128)          262272      ['dense_32[0][0]']               
+                                                                                                  
+ dense_35 (Dense)               (None, 128)          262272      ['dense_34[0][0]']               
+                                                                                                  
+ throttle_value (Dense)         (None, 1)            129         ['dense_29[0][0]']               
+                                                                                                  
+ throttle_flag (Dense)          (None, 1)            129         ['dense_31[0][0]']               
+                                                                                                  
+ steering_value (Dense)         (None, 1)            129         ['dense_33[0][0]']               
+                                                                                                  
+ steering_flag (Dense)          (None, 1)            129         ['dense_35[0][0]']               
+                                                                                                  
+==================================================================================================
+Total params: 355,238,660
+Trainable params: 355,238,660
+Non-trainable params: 0
+__________________________________________________________________________________________________
